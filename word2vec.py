@@ -18,9 +18,8 @@ def sigmoid(x):
     """
 
     ### YOUR CODE HERE
+    return 1 / (1 + np.exp(-1 * x))
     ### END YOUR CODE
-
-    return s
 
 
 def naiveSoftmaxLossAndGradient(
@@ -53,6 +52,23 @@ def naiveSoftmaxLossAndGradient(
     """
 
     ### YOUR CODE HERE
+
+    # Calculating yHat
+    yHatNum = np.exp(np.dot(outsideVectors, centerWordVec))
+    yHatDenom = np.sum(yHatNum)
+    yHatDist = yHatNum/yHatDenom
+    # creating y True one hot
+    yTrue = np.zeros_like(yHatDist)
+    yTrue[outsideWordIdx] = 1
+
+    # computing loss
+    probOutsideGivenCenter = yHatNum[outsideWordIdx]/yHatDenom
+    loss = -np.log(probOutsideGivenCenter)
+    # gradient v_c
+    diff = (yHatDist - yTrue)[np.newaxis, :]
+    gradCenterVec = np.dot(diff, outsideVectors)
+    # gradient U
+    gradOutsideVecs = np.dot(diff.transpose(), centerWordVec[np.newaxis, :])
     ### END YOUR CODE
 
     return loss, gradCenterVec, gradOutsideVecs
@@ -140,6 +156,7 @@ def skipgram(currentCenterWord, windowSize, outsideWords, word2Ind,
     loss = 0.0
     gradCenterVecs = np.zeros(centerWordVectors.shape)
     gradOutsideVectors = np.zeros(outsideVectors.shape)
+
 
     ### YOUR CODE HERE
     ### END YOUR CODE
@@ -244,6 +261,6 @@ def test_word2vec():
 
 
 if __name__ == "__main__":
-    test_word2vec()
+    #test_word2vec()
     test_naiveSoftmaxLossAndGradient()
-    test_sigmoid()
+    #test_sigmoid()
