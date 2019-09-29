@@ -65,7 +65,7 @@ def naiveSoftmaxLossAndGradient(
     # computing loss
     probOutsideGivenCenter = yHatNum[outsideWordIdx]/yHatDenom
     loss = -np.log(probOutsideGivenCenter)
-    # gradient v_c  (1, d)
+    # gradient v_c  (d,)
     diff = (yHatDist - yTrue)[np.newaxis, :]
     gradCenterVec = np.dot(diff, outsideVectors).flatten()
     # gradient U (n, d)
